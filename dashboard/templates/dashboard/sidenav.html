@@ -1,0 +1,64 @@
+<h5>Group Chats</h5>
+<div class="d-flex align-items-start">
+  <div
+    class="nav flex-column nav-pills me-3"
+    id="v-pills-tab"
+    role="tablist"
+    aria-orientation="vertical"
+  >
+    {% for group in object_list %}
+    <a
+      class="nav-link {% if group.group.name == group_name %}active{% endif %}"
+      href="/g/{{group.group.name}}/"
+      
+    >
+      {{group.group.name}}
+    </a>
+    {% endfor %}
+  </div>
+  <div class="tab-content" id="v-pills-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="v-pills-{{group_name}}"
+      role="tabpanel"
+      aria-labelledby="v-pills-{{group_name}}-tab"
+    >
+      <div class="container">
+          <h4>Group Name:{{group_name}}</h4>
+        <div
+          class="border"
+          id="chat_logs"
+          style="
+            max-height: 500px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+          "
+        >
+        {% for chat in chats %}
+            {% if chat.group.name == group_name %}
+            <div class="border m-4 p-4">
+              <p><u><em>{% if request.user == chat.user %}You{% else %}{{chat.user|title}} 
+                  {% endif %}</em> :</u></p>
+              <div class="d-flex mx-4">
+                  <p style="width:300px; word-wrap: break-word;">
+                      {{chat.content}}
+                  </p>
+                  <p><small class="">{{chat.timestamp}}</small></p>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <br />
+        <div class="d-flex">
+          <input class="form-control" type="text" id="chat_input" />
+          <button class="btn btn-primary" type="submit" id="chat_submit">
+            Submit
+          </button>
+        </div>
+        {% comment %} {{group_name|json_script:"group_name"}} {% endcomment %}
+      </div>
+    </div>
+  </div>
+</div>

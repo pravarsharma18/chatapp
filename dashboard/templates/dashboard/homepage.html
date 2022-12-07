@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block content %} 
+{% include 'dashboard/sidenav.html' %}
+
+<script>
+  let groupName = "{{group_name}}";
+  let userName = "{{request.user}}";
+  console.log("user requested", "{{request.user}}");
+</script>
+{% endblock content %}

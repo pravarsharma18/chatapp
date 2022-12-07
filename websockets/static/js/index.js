@@ -1,7 +1,7 @@
 let socketUrl = "ws://127.0.0.1:8000/ws/sc/";
-let ws = new WebSocket(
-  "ws://" + window.location.host + "/ws/ac/" + groupName + "/"
-);
+url = "ws://" + window.location.host + "/ws/ac/" + groupName + "/";
+console.log("url: ", url);
+let ws = new WebSocket(url);
 let submit = document.getElementById("chat_submit");
 let msg = document.getElementById("chat_input");
 let msgLogs = document.getElementById("chat_logs");
@@ -15,9 +15,13 @@ ws.onmessage = function (e) {
   console.log("recieved from server", e);
   console.log(JSON.parse(e.data));
   parsedData = JSON.parse(e.data);
-  let p = document.createElement("p");
+  let p = document.createElement("div");
   p.classList.add("border");
-  p.append(`${parsedData.user}: ${parsedData.msg}`);
+  p.append(
+    `${parsedData.user == userName ? "You" : parsedData.user} : ${
+      parsedData.msg
+    }`
+  );
 
   msgLogs.prepend(p);
 };

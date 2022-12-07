@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include("websockets.urls")),
+    path('', include("dashboard.urls")),
+    path('group/', include("websockets.urls")),
     path('admin/', admin.site.urls),
 ]

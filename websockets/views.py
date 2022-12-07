@@ -4,7 +4,7 @@ from .models import Group, Chat
 
 def homepage(request, group_name):
     group, created = Group.objects.get_or_create(name=group_name)
-    chats = group.chat.all().order_by('timestamp')
+    chats = group.chat.all().order_by('-timestamp')
     context = {
         "group_name":group.name,
         "chats":chats
