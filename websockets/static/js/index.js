@@ -1,6 +1,6 @@
 let socketUrl = "ws://127.0.0.1:8000/ws/sc/";
 let ws = new WebSocket(
-  "ws://" + window.location.host + "/ws/sc/" + groupName + "/"
+  "ws://" + window.location.host + "/ws/ac/" + groupName + "/"
 );
 let submit = document.getElementById("chat_submit");
 let msg = document.getElementById("chat_input");
@@ -15,7 +15,11 @@ ws.onmessage = function (e) {
   console.log("recieved from server", e);
   console.log(JSON.parse(e.data));
   parsedData = JSON.parse(e.data);
-  msgLogs.append(parsedData.user + " : " + parsedData.msg + "\n");
+  let p = document.createElement("p");
+  p.classList.add("border");
+  p.append(`${parsedData.user}: ${parsedData.msg}`);
+
+  msgLogs.prepend(p);
 };
 ws.onerror = function (e) {
   console.log("Error occured", e);
@@ -25,6 +29,9 @@ ws.onclose = function (e) {
 };
 
 submit.addEventListener("click", function (e) {
+  if (!msg.value) {
+    return;
+  }
   console.log(JSON.stringify(msg.value));
   ws.send(
     JSON.stringify({
@@ -34,3 +41,8 @@ submit.addEventListener("click", function (e) {
   );
   msg.value = "";
 });
+
+window.onload = (event) => {
+  console.log("focus");
+  msg.focus();
+};

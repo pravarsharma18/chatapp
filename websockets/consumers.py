@@ -5,6 +5,7 @@ from asgiref.sync import async_to_sync
 import json
 from django.contrib.auth import get_user_model
 from .models import Chat, Group
+from channels.db import database_sync_to_async
 
 User = get_user_model()
 
@@ -68,9 +69,9 @@ class MyAsyncConsumer(AsyncConsumer):
         data = json.loads(event['text'])
         chat = Chat()
         chat.content = data['msg']
-        chat.group = Group.objects.get(name=self.groupname)
-        chat.user = User.objects.get(username=data['user'])
-        chat.save()
+        chat.group = await database_sync_to_async(Group.objects.get)(name=self.groupname)
+        chat.user = await database_sync_to_async(User.objects.get)(username=data['user'])
+        await database_sync_to_async(chat.save)()
         await self.channel_layer.group_send(self.groupname, {
             'type':'chat.message',
             'message':event['text'],
